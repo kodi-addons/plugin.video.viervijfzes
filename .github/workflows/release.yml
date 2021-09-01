@@ -12,11 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install dependencies
+        run: sudo apt-get install libxml2-utils
+
       - name: Build zip files
         id: build
         run: |
-          sudo apt-get install libxml2-utils
-          make multizip release=1
+          make build-all release=1
           echo ::set-output name=leia-filename::$(cd ..;ls plugin.video.viervijfzes*.zip | grep -v '+matrix.' | head -1)
           echo ::set-output name=matrix-filename::$(cd ..;ls plugin.video.viervijfzes*+matrix.*.zip | head -1)
 

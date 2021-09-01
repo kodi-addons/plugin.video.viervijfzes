@@ -1,4 +1,4 @@
-name: Kodi
+name: Kodi Addon-Check
 on:
   # Run action when pushed to master, or for commits in a pull request.
   push:
@@ -19,9 +19,10 @@ jobs:
       - name: Check out ${{ github.sha }} from repository ${{ github.repository }}
         uses: actions/checkout@v2
 
-      - name: Run kodi-addon-checker
-        uses: xbmc/action-kodi-addon-checker@v1.2
-        with:
-          kodi-version: ${{ matrix.kodi-version }}
-          rewrite-for-matrix: ${{ matrix.kodi-version == 'matrix' }}
-          addon-id: ${{ github.event.repository.name }}
+      - name: Install dependencies
+        run: |
+          sudo apt-get install libxml2-utils
+          sudo python -m pip install kodi-addon-checker
+
+      - name: Run Addon Check for Kodi ${{matrix.kodi-version}}
+        run: make check-addon-${{matrix.kodi-version}}
